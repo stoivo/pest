@@ -15,7 +15,6 @@ use Pest\Plugins\Actions\CallsHandleOriginalArguments;
 use Pest\Plugins\Actions\CallsTerminable;
 use Pest\Support\Container;
 use Pest\Support\Reflection;
-use Pest\Support\View;
 use PHPUnit\TestRunner\TestResult\Facade;
 use PHPUnit\TextUI\Application;
 use PHPUnit\TextUI\Configuration\Registry;
@@ -38,7 +37,6 @@ final readonly class Kernel
         Bootstrappers\BootOverrides::class,
         Bootstrappers\BootSubscribers::class,
         Bootstrappers\BootFiles::class,
-        Bootstrappers\BootView::class,
         Bootstrappers\BootKernelDump::class,
         Bootstrappers\BootExcludeList::class,
     ];
@@ -159,10 +157,9 @@ final readonly class Kernel
 
                 $writer->write($inspector);
             } catch (Throwable) { // @phpstan-ignore-line
-                View::render('components.badge', [
-                    'type' => 'ERROR',
-                    'content' => sprintf('%s in %s:%d', $message, $file, $line),
-                ]);
+                $this->output->writeln(
+                    'BADGE ERROR '.sprintf('%s in %s:%d', $message, $file, $line)
+                );
             }
 
             exit(1);

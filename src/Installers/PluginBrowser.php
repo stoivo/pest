@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Pest\Installers;
 
-use Pest\Support\View;
-
 final readonly class PluginBrowser
 {
     public static function install(): void
     {
-        View::render('installers/plugin-browser');
+        echo 'Using the visit() function requires the Pest Plugin Browser to be installed.
+
+Run:
+
+- composer require pestphp/pest-plugin-browser:^4.0 --dev
+- npm install playwright@latest
+- npx playwright install
+';
+
     }
 }

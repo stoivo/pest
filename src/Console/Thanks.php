@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Pest\Console;
 
-use Pest\Bootstrappers\BootView;
-use Pest\Support\View;
 use Symfony\Component\Console\Helper\SymfonyQuestionHelper;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,9 +46,6 @@ final readonly class Thanks
      */
     public function __invoke(): void
     {
-        $bootstrapper = new BootView($this->output);
-        $bootstrapper->boot();
-
         $wantsToSupport = false;
 
         if (getenv('PEST_NO_SUPPORT') !== 'true' && $this->input->isInteractive()) {
@@ -63,16 +58,19 @@ final readonly class Thanks
                 )
             );
 
-            View::render('components.new-line');
+            $this->output->writeln("\n");
 
             foreach (self::FUNDING_MESSAGES as $message => $link) {
-                View::render('components.two-column-detail', [
-                    'left' => $message,
-                    'right' => $link,
+
+                $this->output->write([
+                    $message,
+                    '  ',
+                    $link,
+                    '\n',
                 ]);
             }
 
-            View::render('components.new-line');
+            $this->output->writeln("\n");
         }
 
         if ($wantsToSupport === true) {

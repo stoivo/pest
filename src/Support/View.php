@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Pest\Support;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Termwind\Termwind;
+// SHOU?LD REMOVE FILE>!!!
 
-use function Termwind\render;
-use function Termwind\renderUsing;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @internal
@@ -37,15 +35,7 @@ final class View
     {
         $contents = self::compile($path, $data);
 
-        $existing = Termwind::getRenderer();
-
-        renderUsing(self::$output);
-
-        try {
-            render($contents);
-        } finally {
-            renderUsing($existing);
-        }
+        self::$output->writeln($contents);
     }
 
     /**

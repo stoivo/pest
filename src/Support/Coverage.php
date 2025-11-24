@@ -11,10 +11,6 @@ use SebastianBergmann\CodeCoverage\Node\File;
 use SebastianBergmann\Environment\Runtime;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function Termwind\render;
-use function Termwind\renderUsing;
-use function Termwind\terminal;
-
 /**
  * @internal
  */
@@ -128,33 +124,14 @@ final class Coverage
 
             $color = $percentage === '100.0' ? 'green' : ($percentage === '0.0' ? 'red' : 'yellow');
 
-            $truncateAt = max(1, terminal()->width() - 12);
-
-            renderUsing($output);
-            render(<<<HTML
-                <div class="flex mx-2">
-                    <span class="truncate-{$truncateAt}">{$name}</span>
-                    <span class="flex-1 content-repeat-[.] text-gray mx-1"></span>
-                    <span class="text-{$color}">$uncoveredLines {$percentage}%</span>
-                </div>
-            HTML);
+            exit('looks like no use');
         }
 
         $totalCoverageAsString = $totalCoverage->asFloat() === 0.0
             ? '0.0'
             : number_format(floor($totalCoverage->asFloat() * 10) / 10, 1, '.', '');
 
-        renderUsing($output);
-        render(<<<HTML
-            <div class="mx-2">
-                <hr class="text-gray" />
-                <div class="w-full text-right">
-                    <span class="ml-1 font-bold">Total: {$totalCoverageAsString} %</span>
-                </div>
-            </div>
-        HTML);
-
-        return $totalCoverage->asFloat();
+        exit('looks like no use');
     }
 
     /**

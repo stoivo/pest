@@ -8,9 +8,6 @@ use NunoMaduro\Collision\Adapters\Phpunit\TestResult;
 use Pest\Configuration\Project;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function Termwind\render;
-use function Termwind\renderUsing;
-
 /**
  * @internal
  */
@@ -37,8 +34,6 @@ final class Events
         if (($context = $result->context) === []) {
             return $description;
         }
-
-        renderUsing(self::$output);
 
         [
             'assignees' => $assignees,
@@ -82,19 +77,14 @@ final class Events
             return;
         }
 
-        renderUsing(self::$output);
-
         [
             'notes' => $notes,
         ] = $context;
 
         foreach ($notes as $note) {
-            render(sprintf(<<<'HTML'
-                <div class="ml-2">
-                    <span class="text-gray"> // %s</span>
-                </div>
-                HTML, $note,
-            ));
+            self::$output->writeln(
+                sprintf('  // %s', $note)
+            );
         }
     }
 }

@@ -7,7 +7,6 @@ namespace Pest\Plugins;
 use Composer\InstalledVersions;
 use Pest\Console\Thanks;
 use Pest\Contracts\Plugins\HandlesArguments;
-use Pest\Support\View;
 use Pest\TestSuite;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -74,10 +73,7 @@ final readonly class Init implements HandlesArguments
             mkdir($testsBaseDir);
         }
 
-        View::render('components.badge', [
-            'type' => 'INFO',
-            'content' => 'Preparing tests directory.',
-        ]);
+        $this->output->writeln('BADGE INFO Preparing tests directory.');
 
         foreach (self::STUBS as $from => $to) {
             if ($this->isLaravelInstalled()) {
@@ -89,9 +85,10 @@ final readonly class Init implements HandlesArguments
             $toPath = "{$this->testSuite->rootPath}/{$to}";
 
             if (file_exists($toPath)) {
-                View::render('components.two-column-detail', [
-                    'left' => $to,
-                    'right' => 'File already exists.',
+                $this->output->write([
+                    $to,
+                    '    File already exists.',
+                    "\n",
                 ]);
 
                 continue;
@@ -103,13 +100,14 @@ final readonly class Init implements HandlesArguments
 
             copy($fromPath, $toPath);
 
-            View::render('components.two-column-detail', [
-                'left' => $to,
-                'right' => 'File created.',
+            $this->output->write([
+                $to,
+                '    File created.',
+                "\n",
             ]);
         }
 
-        View::render('components.new-line');
+        $this->output->writeln('');
 
         (new Thanks($this->input, $this->output))();
     }

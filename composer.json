@@ -20,7 +20,6 @@
         "php": "^8.3.0",
         "brianium/paratest": "^7.14.2",
         "nunomaduro/collision": "^8.8.3",
-        "nunomaduro/termwind": "^2.3.3",
         "pestphp/pest-plugin": "^4.0.0",
         "pestphp/pest-plugin-arch": "^4.0.0",
         "pestphp/pest-plugin-mutate": "^4.0.1",

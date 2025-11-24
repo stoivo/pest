@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pest;
 
-use Pest\Support\View;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class KernelDump
@@ -60,7 +59,6 @@ final class KernelDump
      */
     private function flush(): void
     {
-        View::renderUsing($this->output);
 
         if ($this->isOpeningHeadline($this->buffer)) {
             $this->buffer = implode(PHP_EOL, array_slice(explode(PHP_EOL, $this->buffer), 2));
@@ -84,11 +82,7 @@ final class KernelDump
         $firstLine = array_pop($lines);
         $lines = array_reverse($lines);
 
-        View::render('components.badge', [
-            'type' => $type,
-            'content' => $firstLine,
-        ]);
-
+        $this->output->writeln('BADGE '.$type.' '.$firstLine);
         $this->output->writeln($lines);
 
         $this->buffer = '';

@@ -16,10 +16,6 @@ use PHPUnit\TestRunner\TestResult\TestResult as PHPUnitTestResult;
 use SebastianBergmann\Timer\Duration;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Termwind\Terminal;
-
-use function Termwind\render;
-use function Termwind\terminal;
 
 /**
  * @internal
@@ -51,7 +47,6 @@ final class CompactPrinter
      * Creates a new instance of the Compact Printer.
      */
     public function __construct(
-        private readonly Terminal $terminal,
         private readonly OutputInterface $output,
         private readonly Style $style,
         private readonly int $compactSymbolsPerLine,
@@ -65,10 +60,9 @@ final class CompactPrinter
     public static function default(): self
     {
         return new self(
-            terminal(),
             new ConsoleOutput(decorated: true),
             new Style(new ConsoleOutput(decorated: true)),
-            terminal()->width() - 4,
+            80 - 4,
         );
     }
 
@@ -77,7 +71,7 @@ final class CompactPrinter
      */
     public function newLine(): void
     {
-        render('<div class="py-1"></div>');
+        $this->output->writeln('');
     }
 
     /**
@@ -89,7 +83,7 @@ final class CompactPrinter
 
         $symbolsOnCurrentLine = $this->processed % $this->compactSymbolsPerLine;
 
-        if ($symbolsOnCurrentLine >= $this->terminal->width() - 4) {
+        if ($symbolsOnCurrentLine >= 80 - 4) {
             $symbolsOnCurrentLine = 0;
         }
 

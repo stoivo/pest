@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Pest\Plugins;
 
 use Pest\Contracts\Plugins\HandlesArguments;
-use Pest\Support\View;
 use PHPUnit\TextUI\Help as PHPUnitHelp;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -33,11 +32,11 @@ final readonly class Help implements HandlesArguments
     public function handleArguments(array $arguments): array
     {
         if ($this->hasArgument('--help', $arguments)) {
-            View::render('version', [
-                'version' => version(),
-            ]);
 
-            View::render('usage');
+            $this->output->writeln([
+                'Pest Testing Framework '.version().'.',
+                'USAGE: pest <file> [options]',
+            ]);
 
             foreach ($this->getContent() as $title => $options) {
                 if ($title === 'Usage') {
@@ -65,9 +64,11 @@ final readonly class Help implements HandlesArguments
                         continue;
                     }
 
-                    View::render('components.two-column-detail', [
-                        'left' => $this->colorizeOptions($argument),
-                        'right' => preg_replace(['/</', '/>/'], ['[', ']'], $description),
+                    $this->output->write([
+                        $argument,
+                        '       ',
+                        preg_replace(['/</', '/>/'], ['[', ']'], $description),
+                        "\n",
                     ]);
                 }
             }
@@ -78,18 +79,6 @@ final readonly class Help implements HandlesArguments
         }
 
         return $arguments;
-    }
-
-    /**
-     * Colorizes the given string options.
-     */
-    private function colorizeOptions(string $argument): string
-    {
-        return (string) preg_replace(
-            ['/</', '/>/', '/(-+[\w-]+)/'],
-            ['[', ']', '<fg=blue;options=bold>$1</>'],
-            $argument
-        );
     }
 
     /**
